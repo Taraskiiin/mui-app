@@ -3,8 +3,10 @@ import {
 	Drawer,
 	List,
 	ListItem,
+	Theme,
 	Toolbar,
 	Typography,
+	useTheme,
 } from '@mui/material';
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import ContactDataGrid from '../DataGrid/ContactDataGrid';
@@ -12,17 +14,51 @@ import ContactCardGrid from '../DataGrid/ContactDataGrid';
 import ContactForm from '../Form/ContactForm';
 import ContactTable from '../Table/ContactTable';
 
+const drawerWidth = 240;
+
+const themedStyles = (theme: Theme) => {
+	return {
+		appBar: {
+			zIndex: theme.zIndex.drawer + 1,
+		},
+	};
+};
+
+const simpleStyles = {
+	drawer: {
+		width: drawerWidth,
+		'& .MuiBackdrop-root': {
+			display: 'none',
+		},
+	},
+	drawerPaper: {
+		width: drawerWidth,
+		backgroundColor: 'rgba(120, 120, 120, 0.2)',
+	},
+	content: {
+		marginLeft: drawerWidth,
+		padding: 3,
+	},
+};
+
 export default function NavDrawer() {
+	const theme = useTheme();
 	return (
 		<BrowserRouter>
-			<AppBar position='fixed'>
+			<AppBar position='fixed' sx={themedStyles(theme).appBar}>
 				<Toolbar>
 					<Typography variant='h6' noWrap>
 						MUI Styling
 					</Typography>
 				</Toolbar>
 			</AppBar>
-			<Drawer variant='temporary' open={true}>
+			<Drawer
+				variant='temporary'
+				open={true}
+				sx={simpleStyles.drawer}
+				PaperProps={{ sx: simpleStyles.drawerPaper, elevation: 9 }}
+			>
+				<Toolbar />
 				<List>
 					{[
 						{ text: 'Input Form', route: '/form' },
@@ -36,7 +72,8 @@ export default function NavDrawer() {
 					))}
 				</List>
 			</Drawer>
-			<main>
+			<main style={simpleStyles.content}>
+				<Toolbar />
 				<Routes>
 					<Route path='/' element={<ContactForm />} />
 					<Route path='/form' element={<ContactForm />} />
