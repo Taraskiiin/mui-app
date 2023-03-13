@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
 	Alert,
+	AlertTitle,
 	Autocomplete,
 	Button,
 	Dialog,
@@ -45,6 +46,7 @@ export default function ContactForm() {
 		};
 	};
 
+	const [alertOpen, setAlertOpen] = useState<boolean>(false);
 	const [formValues, setFormValues] = useState<FormValues>(
 		getDefaultFormValues()
 	);
@@ -103,6 +105,24 @@ export default function ContactForm() {
 			...formValues,
 			[name]: value,
 		});
+	};
+
+	const clearValues = () => {
+		setFormValues({ ...getDefaultFormValues() });
+	};
+
+	const handleSubmit = () => {
+		contactData.push(formValues);
+		setAlertOpen(true);
+		clearValues();
+	};
+
+	const handleClearClick = () => {
+		clearValues();
+	};
+
+	const handlerAlertClick = () => {
+		setAlertOpen(false);
 	};
 
 	return (
@@ -170,7 +190,7 @@ export default function ContactForm() {
 											<TextField {...params} sx={{ minWidth: minWidth }} />
 										);
 									}}
-									value={formValues.lastUpdates}
+									value={formValues?.lastUpdates}
 									onChange={handleDatePickerChange}
 								/>
 							</LocalizationProvider>
@@ -208,15 +228,18 @@ export default function ContactForm() {
 								</RadioGroup>
 							</FormGroup>
 							<Stack>
-								<Button>Submit</Button>
-								<Button>Clear</Button>
+								<Button onClick={handleSubmit}>Submit</Button>
+								<Button onClick={handleClearClick}>Clear</Button>
 							</Stack>
 						</FormGroup>
 					</FormControl>
 				</form>
 			</Paper>
-			<Dialog open={false}>
-				<Alert></Alert>
+			<Dialog open={alertOpen} onClose={handlerAlertClick}>
+				<Alert onClose={handlerAlertClick}>
+					<AlertTitle>Success!</AlertTitle>
+					Form Submitted
+				</Alert>
 			</Dialog>
 		</>
 	);
