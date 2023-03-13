@@ -23,14 +23,27 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const roles = ['React', 'Angular', 'Python', 'NodeJS'];
 const skills = ['Software Dev', 'Architect', 'Designer', 'Business Analyst'];
+const minWidth = 300;
 
 export default function ContactForm() {
 	return (
 		<Paper>
 			<form>
 				<FormControl>
-					<FormGroup row>
-						<TextField id='name' name='name' label='Name' variant='outlined' />
+					<FormGroup
+						row
+						sx={{
+							padding: '16px',
+							justifyContent: 'space-between',
+						}}
+					>
+						<TextField
+							id='name'
+							name='name'
+							label='Name'
+							variant='outlined'
+							sx={{ minWidth: minWidth, marginRight: 2 }}
+						/>
 						<Autocomplete
 							options={roles}
 							renderInput={(params) => <TextField name='role' {...params} />}
@@ -38,12 +51,20 @@ export default function ContactForm() {
 							renderOption={(props, option) => {
 								return <li {...props}>{`${option}`}</li>;
 							}}
+							sx={{ minWidth: minWidth }}
 						/>
 					</FormGroup>
-					<FormGroup row>
+					<FormGroup
+						row
+						sx={{
+							padding: '16px',
+							justifyContent: 'space-between',
+						}}
+					>
 						<Select
 							id='skill-select'
 							renderValue={(select: string[]) => select.join(', ')}
+							sx={{ minWidth: minWidth, marginRight: 2 }}
 						>
 							{skills.map((skillName) => (
 								<MenuItem value={skillName} key={skillName}>
@@ -58,15 +79,21 @@ export default function ContactForm() {
 								renderInput={(
 									params: JSX.IntrinsicAttributes & TextFieldProps
 								) => {
-									return <TextField {...params} />;
+									return <TextField sx={{ minWidth: minWidth }} {...params} />;
 								}}
 								value='abc'
 								onChange={() => {}}
 							/>
 						</LocalizationProvider>
 					</FormGroup>
-					<FormGroup row>
-						<FormGroup>
+					<FormGroup
+						row
+						sx={{
+							padding: '16px',
+							justifyContent: 'space-between',
+						}}
+					>
+						<FormGroup sx={{ minWidth: minWidth, marginRight: 2 }}>
 							<FormLabel component='legend'>Work Preference</FormLabel>
 						</FormGroup>
 						<RadioGroup
