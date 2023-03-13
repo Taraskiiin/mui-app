@@ -1,12 +1,18 @@
 import React from 'react';
 import {
 	Autocomplete,
+	Button,
 	FormControl,
+	FormControlLabel,
 	FormGroup,
+	FormLabel,
 	ListItemText,
 	MenuItem,
 	Paper,
+	Radio,
+	RadioGroup,
 	Select,
+	Stack,
 	TextField,
 	TextFieldProps,
 } from '@mui/material';
@@ -58,6 +64,36 @@ export default function ContactForm() {
 								onChange={() => {}}
 							/>
 						</LocalizationProvider>
+					</FormGroup>
+					<FormGroup row>
+						<FormGroup>
+							<FormLabel component='legend'>Work Preference</FormLabel>
+						</FormGroup>
+						<RadioGroup
+							id='preference-type-radio'
+							name='preference'
+							value='Work from home'
+						>
+							<FormControlLabel
+								label='Work from home'
+								control={<Radio />}
+								value='Work from home'
+							/>
+							<FormControlLabel
+								label='Hybrid'
+								control={<Radio />}
+								value='Hybrid'
+							/>
+							<FormControlLabel
+								label='In office'
+								control={<Radio />}
+								value='In office'
+							/>
+						</RadioGroup>
+						<Stack>
+							<Button>Submit</Button>
+							<Button>Clear</Button>
+						</Stack>
 					</FormGroup>
 				</FormControl>
 			</form>
