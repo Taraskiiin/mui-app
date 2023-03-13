@@ -7,7 +7,7 @@ export interface FormValues {
 	preference?: string;
 }
 
-const today = new Date();
+export const today = new Date();
 
 export const contactData: Array<FormValues> = [
 	{

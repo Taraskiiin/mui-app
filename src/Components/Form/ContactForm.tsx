@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Autocomplete,
 	Button,
@@ -12,20 +12,94 @@ import {
 	Radio,
 	RadioGroup,
 	Select,
+	SelectChangeEvent,
 	Stack,
 	TextField,
-	TextFieldProps,
 } from '@mui/material';
 
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-const roles = ['React', 'Angular', 'Python', 'NodeJS'];
-const skills = ['Software Dev', 'Architect', 'Designer', 'Business Analyst'];
+import { contactData, FormValues, today } from '../../Data/ContactData';
+
+const roles = ['Software Dev', 'Architect', 'Designer', 'Business Analyst'];
+const skills = ['React', 'Angular', 'Python', 'NodeJS', 'Machine Learning'];
+
 const minWidth = 300;
+const defaultPreference = 'Work from home';
 
 export default function ContactForm() {
+	const getDefaultFormValues = () => {
+		return {
+			id: contactData.length + 1,
+			name: '',
+			role: '',
+			skills: ['React'],
+			lastUpdates: `${today.getDate()}/${
+				today.getMonth() + 1
+			}/${today.getFullYear()}`,
+			preference: defaultPreference,
+		};
+	};
+
+	const [formValues, setFormValues] = useState<FormValues>(
+		getDefaultFormValues()
+	);
+
+	const handleTextFieldChange = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = event.target;
+		setFormValues({
+			...formValues,
+			[name]: value,
+		});
+	};
+
+	const handleAutoCompleteChange = (value: string) => {
+		setFormValues({
+			...formValues,
+			role: value || '',
+		});
+	};
+
+	const handleSelectChange = (event: SelectChangeEvent<string[]>) => {
+		const {
+			target: { value },
+		} = event;
+		setFormValues({
+			...formValues,
+			skills: typeof value === 'string' ? value.split(', ') : value,
+		});
+	};
+
+	const handleDatePickerChange = (value: string | null | undefined) => {
+		const lastDate = value as unknown as {
+			month: () => string;
+			date: () => string;
+			year: () => string;
+		};
+
+		setFormValues({
+			...formValues,
+			lastUpdates: `${lastDate.date()}/${
+				lastDate.month() + 1
+			}/${lastDate.year()}`,
+		});
+	};
+
+	const handleRadioChange = (
+		event: React.ChangeEvent<HTMLInputElement>,
+		value: string
+	) => {
+		const { name } = event.target;
+		setFormValues({
+			...formValues,
+			[name]: value,
+		});
+	};
+
 	return (
 		<Paper>
 			<form>
@@ -42,9 +116,12 @@ export default function ContactForm() {
 							name='name'
 							label='Name'
 							variant='outlined'
-							sx={{ minWidth: minWidth, marginRight: 2 }}
+							sx={{ minWidth: minWidth, marginRight: '16px' }}
+							value={formValues.name}
+							onChange={handleTextFieldChange}
 						/>
 						<Autocomplete
+							onInputChange={handleAutoCompleteChange}
 							options={roles}
 							renderInput={(params) => <TextField name='role' {...params} />}
 							getOptionLabel={(roleOption) => `${roleOption}`}
@@ -52,6 +129,10 @@ export default function ContactForm() {
 								return <li {...props}>{`${option}`}</li>;
 							}}
 							sx={{ minWidth: minWidth }}
+							value={formValues.role || ''}
+							isOptionEqualToValue={(option, value) =>
+								option === value || value === ''
+							}
 						/>
 					</FormGroup>
 					<FormGroup
@@ -64,7 +145,9 @@ export default function ContactForm() {
 						<Select
 							id='skill-select'
 							renderValue={(select: string[]) => select.join(', ')}
-							sx={{ minWidth: minWidth, marginRight: 2 }}
+							sx={{ minWidth: minWidth, marginRight: '16px' }}
+							value={formValues.skills || ''}
+							onChange={handleSelectChange}
 						>
 							{skills.map((skillName) => (
 								<MenuItem value={skillName} key={skillName}>
@@ -76,13 +159,11 @@ export default function ContactForm() {
 							<DesktopDatePicker
 								label='Date'
 								inputFormat='DD/MM/YYYY'
-								renderInput={(
-									params: JSX.IntrinsicAttributes & TextFieldProps
-								) => {
-									return <TextField sx={{ minWidth: minWidth }} {...params} />;
+								renderInput={(params) => {
+									return <TextField {...params} sx={{ minWidth: minWidth }} />;
 								}}
-								value='abc'
-								onChange={() => {}}
+								value={formValues.lastUpdates}
+								onChange={handleDatePickerChange}
 							/>
 						</LocalizationProvider>
 					</FormGroup>
@@ -93,30 +174,31 @@ export default function ContactForm() {
 							justifyContent: 'space-between',
 						}}
 					>
-						<FormGroup sx={{ minWidth: minWidth, marginRight: 2 }}>
+						<FormGroup sx={{ minWidth: minWidth, marginRight: '16px' }}>
 							<FormLabel component='legend'>Work Preference</FormLabel>
+							<RadioGroup
+								id='preference-type-radio'
+								name='preference'
+								value={formValues.preference}
+								onChange={handleRadioChange}
+							>
+								<FormControlLabel
+									label={defaultPreference}
+									control={<Radio />}
+									value={defaultPreference}
+								/>
+								<FormControlLabel
+									label='Hybrid'
+									control={<Radio />}
+									value='Hybrid'
+								/>
+								<FormControlLabel
+									label='In office'
+									control={<Radio />}
+									value='In office'
+								/>
+							</RadioGroup>
 						</FormGroup>
-						<RadioGroup
-							id='preference-type-radio'
-							name='preference'
-							value='Work from home'
-						>
-							<FormControlLabel
-								label='Work from home'
-								control={<Radio />}
-								value='Work from home'
-							/>
-							<FormControlLabel
-								label='Hybrid'
-								control={<Radio />}
-								value='Hybrid'
-							/>
-							<FormControlLabel
-								label='In office'
-								control={<Radio />}
-								value='In office'
-							/>
-						</RadioGroup>
 						<Stack>
 							<Button>Submit</Button>
 							<Button>Clear</Button>
