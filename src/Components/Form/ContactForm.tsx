@@ -37,6 +37,23 @@ export const skills = [
 export const minWidth = 300;
 export const defaultPreference = 'Work from home';
 
+const paperInputsStyle = {
+	'& .MuiOutlinedInput-root': {
+		'& fieldset': {
+			border: '1px solid',
+			borderColor: 'primary.main',
+		},
+	},
+	'& .MuiOutlinedInput-root:hover': {
+		'& fieldset': {
+			borderColor: 'primary.light',
+		},
+	},
+	'& .MuiFormLabel-root': {
+		color: 'primary.dark',
+	},
+};
+
 export default function ContactForm() {
 	const getDefaultFormValues = () => {
 		return {
@@ -132,7 +149,13 @@ export default function ContactForm() {
 
 	return (
 		<>
-			<Paper>
+			<Paper
+				sx={{
+					...paperInputsStyle,
+					margin: 1,
+					backgroundColor: 'grid.main',
+				}}
+			>
 				<form>
 					<FormControl>
 						<FormGroup
@@ -178,9 +201,25 @@ export default function ContactForm() {
 								preference={formValues.preference}
 								onChange={handleRadioChange}
 							/>
-							<Stack>
-								<Button onClick={handleSubmit}>Submit</Button>
-								<Button onClick={handleClearClick}>Clear</Button>
+							<Stack
+								justifyContent='space-around'
+								alignItems='center'
+								sx={{ minWidth: minWidth }}
+							>
+								<Button
+									variant='contained'
+									sx={{ height: 56, width: 100 }}
+									onClick={handleSubmit}
+								>
+									Submit
+								</Button>
+								<Button
+									variant='beautiful'
+									sx={{ height: 56, width: 100 }}
+									onClick={handleClearClick}
+								>
+									Clear
+								</Button>
 							</Stack>
 						</FormGroup>
 					</FormControl>
