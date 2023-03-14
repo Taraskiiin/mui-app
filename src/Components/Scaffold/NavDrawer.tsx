@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import ContactDataGrid from '../DataGrid/ContactDataGrid';
-import ContactCardGrid from '../DataGrid/ContactDataGrid';
+import ContactCardGrid from '../Grid/ContactCardGrid';
 import ContactForm from '../Form/ContactForm';
 import ContactTable from '../Table/ContactTable';
 
@@ -80,7 +80,7 @@ export default function NavDrawer() {
 					<Route path='/form' element={<ContactForm />} />
 					<Route path='/grid' element={<ContactCardGrid />} />
 					<Route path='/table' element={<ContactTable />} />
-					<Route path='/datagrida' element={<ContactDataGrid />} />
+					<Route path='/data-grid' element={<ContactDataGrid />} />
 				</Routes>
 			</main>
 		</BrowserRouter>
