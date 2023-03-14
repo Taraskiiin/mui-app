@@ -21,6 +21,7 @@ export default function AutoSelect(props: {
 			id='skill-select'
 			renderValue={(select: string[]) => select.join(', ')}
 			sx={{ minWidth: minWidth, marginRight: '16px' }}
+			multiple
 		>
 			{skills.map((skillName) => (
 				<MenuItem value={skillName} key={skillName}>

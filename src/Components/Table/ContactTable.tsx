@@ -24,11 +24,20 @@ export default function ContactTable() {
 				</TableHead>
 				<TableBody>
 					{contactData.map((contact) => (
-						<TableRow key={contact.name}>
-							{Object.entries(contact).map(
-								([key, value]) =>
-									key !== 'id' && <TableCell key={key}>{value}</TableCell>
-							)}
+						<TableRow key={contact.id}>
+							{Object.entries(contact).map(([key, value]) => {
+								if (key === 'skills') {
+									return (
+										<TableCell key={contact.id + key}>
+											{value.join(', ')}
+										</TableCell>
+									);
+								}
+								if (key !== 'id') {
+									return <TableCell key={contact.id + key}>{value}</TableCell>;
+								}
+								return '';
+							})}
 						</TableRow>
 					))}
 				</TableBody>
